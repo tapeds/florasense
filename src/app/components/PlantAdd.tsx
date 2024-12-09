@@ -84,13 +84,12 @@ export default function PlantAdd() {
     }
 
     function preprocess(img: HTMLImageElement) {
-      const tensor = tf.browser
-        .fromPixels(img)
-        .resizeBilinear([128, 128])
-        .toFloat()
-        .expandDims();
+      const tensor = tf.browser.fromPixels(img);
+      const resized = tf.image.resizeBilinear(tensor, [128, 128]);
+      const normalized = resized.div(tf.scalar(1));
+      const batched = normalized.expandDims(0);
 
-      return tensor;
+      return batched;
     }
 
     const loadedImage = await loadImage(data.gambar[0]);

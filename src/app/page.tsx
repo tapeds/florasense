@@ -7,7 +7,7 @@ import PlantAdd from "@/app/components/PlantAdd";
 import Button from "@/components/buttons/Button";
 
 export default function Home() {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
 
   return (
     <main className="bg-slate-50 min-h-screen flex justify-center items-center py-20">

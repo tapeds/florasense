@@ -16,11 +16,7 @@ export async function POST(request: NextRequest) {
           parts: [
             {
               text: JSON.stringify({
-                nama,
-                moisture,
-                gambar,
-                prompt:
-                  "Please give me a recommendation based on the plant name, moisture level, and image",
+                prompt: `Could you provide an actionable care recommendation for the plant that I have? It is a ${nama} plant with a moisture level of ${moisture}. Its health condition is in the "${gambar}" state.`,
               }),
             },
           ],
