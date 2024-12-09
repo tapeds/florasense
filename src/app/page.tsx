@@ -21,7 +21,7 @@ export default function Home() {
             }}
             disabled={page === 1}
           >
-            Cari Tanaman
+            Cari Tumbuhan
           </Button>
           <Button
             onClick={() => {
@@ -29,7 +29,7 @@ export default function Home() {
             }}
             disabled={page === 2}
           >
-            Tambah Tanaman
+            Tambah Tumbuhan
           </Button>
         </div>
 

@@ -19,11 +19,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.1.10",
     "@tanstack/react-query": "^5.32.0",
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.7.7",
     "clsx": "^2.1.0",
     "cssnano": "^6.0.3",
+    "formidable": "^3.5.2",
     "next": "14.2.1",
     "next-sitemap": "^4.2.3",
     "react": "^18",
@@ -34,12 +38,14 @@
     "react-icons": "^5.1.0",
     "tailwind-merge": "^2.2.2",
     "universal-cookie": "^7.1.0",
-    "yet-another-react-lightbox": "^3.21.7"
+    "yet-another-react-lightbox": "^3.21.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@commitlint/cli": "^18.4.4",
     "@commitlint/config-conventional": "^18.4.4",
+    "@types/formidable": "^3.4.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
