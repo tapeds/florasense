@@ -4,11 +4,17 @@ import UploadImage from "@/components/form/UploadImage";
 import Typography from "@/components/Typography";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
+import * as tf from "@tensorflow/tfjs";
+import * as tfNode from "@tensorflow/tfjs-node";
+
+import { serialize } from "object-to-formdata";
 
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { classNames } from "@/app/const/TumbuhanClassnames";
 
 interface SensorFormData {
   moisture: string;
@@ -28,37 +34,22 @@ const style = {
   p: 4,
 };
 
-type SensorFormPayloadProps = {
-  moisture: string;
-  nama: string;
-  gambar: string;
-};
-
 export default function PlantAdd() {
+  const [model, setModel] = useState<tf.LayersModel>();
   const [recommendation, setRecommendation] = useState("");
+
+  useEffect(() => {
+    tf.ready().then(() => {
+      loadModel();
+    });
+  }, []);
 
   const methods = useForm<SensorFormData>();
 
   const { handleSubmit } = methods;
 
-  const toBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
-
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: SensorFormPayloadProps) => {
+    mutationFn: async (data: FormData) => {
       const res = await axios.post("/api/gemini", data, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -75,19 +66,67 @@ export default function PlantAdd() {
   });
 
   const onSubmitSensorForm = async (data: SensorFormData) => {
-    const base64Gambar = await toBase64(data.gambar[0]);
+    if (!model) {
+      return toast.error("Please try again later");
+    }
+
+    function loadImage(file: File): Promise<HTMLImageElement> {
+      return new Promise((resolve, reject) => {
+        const im = new Image();
+        const fr = new FileReader();
+        fr.onload = function () {
+          im.src = fr.result as string;
+        };
+        fr.onerror = reject;
+        fr.onloadend = () => resolve(im);
+        fr.readAsDataURL(file);
+      });
+    }
+
+    function preprocess(img: HTMLImageElement) {
+      const tensor = tf.browser
+        .fromPixels(img)
+        .resizeBilinear([128, 128])
+        .toFloat()
+        .expandDims();
+
+      return tensor;
+    }
+
+    const loadedImage = await loadImage(data.gambar[0]);
+    const preprocessedImage = preprocess(loadedImage);
+
+    const prediction = model.predict(preprocessedImage);
+
+    // @ts-ignore datasync exist, but has error type
+    const predictions = prediction.dataSync();
+
+    const predictedClassIndex = predictions.indexOf(Math.max(...predictions));
+    const predictedClassName = classNames[predictedClassIndex];
 
     const dataTumbuhan = {
       ...data,
-      gambar: base64Gambar as string,
+      gambar: predictedClassName,
     };
 
-    mutate(dataTumbuhan);
+    const formData = serialize(dataTumbuhan);
+
+    mutate(formData);
   };
 
   const handleClose = () => {
     setRecommendation("");
   };
+
+  async function loadModel() {
+    try {
+      const modelURL = `${process.env.NEXT_PUBLIC_BASE_URL}/tfjs_model/model.json`;
+      const model = await tf.loadLayersModel(modelURL);
+      setModel(model);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <>

@@ -10,6 +10,50 @@ interface PlantSearchFormData {
   plantName: string;
 }
 
+interface PlantProps {
+  _id: number;
+  "Plant ID": number;
+  "Plant Code": string;
+  "Botanical Name": string;
+  "Common Name": string;
+  "Previous Name": string;
+  "Plant Type": string;
+  "Water Needs": string;
+  "Climate Zones": string;
+  "Light Needs": string;
+  "Soil Type": string;
+  "Soil Additional": string;
+  Maintenance: string;
+  Abcission: string;
+  "Height Ranges": string;
+  "Spread Ranges": string;
+  "Flower colour": string;
+  "Foliage Colour": string;
+  Perfume: string;
+  Aromatic: string;
+  Edible: string;
+  "Bird Attracting": string;
+  "Bird Attractant": string;
+  "Bore water Tolerance": string;
+  "Frost Tolerance": string;
+  "Greywater Tolerance": string;
+  Native: string;
+  "Butterfly Attracting": string;
+  "Butterfly Type": string;
+  Image: string;
+  "Image Location": string;
+  "Image Owner": string;
+  "Herb External Have": string;
+  "Herb Images change to": string;
+  Notes: string;
+  "Why photo removed": string;
+  "Why plant removed": string;
+  "Actioned By": string;
+  "Date Actioned": string | null;
+  Status: string;
+  rank: number;
+}
+
 export default function PlantSearch() {
   const toggleExpand = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -43,7 +87,7 @@ export default function PlantSearch() {
     refetchOnMount: false,
   });
 
-  const plantData = data?.data.result.records;
+  const plantData = data?.data.result.records as PlantProps[];
 
   return (
     <>
