@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: {
-    default: "Nextjs Starter Template",
+    default: "FloraSense",
     template: "%s | Nextjs Starter Template",
   },
   description: "Nextjs 14.2.1 + Tailwind CSS starter template",
