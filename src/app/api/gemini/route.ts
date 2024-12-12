@@ -26,18 +26,26 @@ export async function POST(request: NextRequest) {
 
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
-      payload,
+      payload
     );
+
+    const rawRecommendation =
+      response.data.candidates[0].content.parts[0].text;
+
+    const readableRecommendation = rawRecommendation
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>") 
+      .replace(/\n+/g, "<br />"); 
 
     return NextResponse.json({
       status: 200,
-      recommendation: response.data.candidates[0].content.parts[0].text,
+      recommendation: `<div>${readableRecommendation}</div>`,
     });
   } catch (error) {
     console.error("API call error:", error);
     return NextResponse.json(
       { error: "Failed to get recommendation" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

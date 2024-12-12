@@ -165,9 +165,11 @@ export default function PlantAdd() {
       </FormProvider>
       <Modal open={!!recommendation} onClose={handleClose}>
         <Box sx={style}>
-          <Typography variant="p" className="text-black">
-            {recommendation}
-          </Typography>
+          <div
+            style={{ whiteSpace: "pre-line" }}
+            dangerouslySetInnerHTML={{ __html: recommendation }}
+            className="text-black"
+          />
         </Box>
       </Modal>
     </>
