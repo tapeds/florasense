@@ -36,7 +36,7 @@ export default function UploadImage({
   validation,
   accept = { "image/*": [".jpg", ".jpeg", ".png"] },
   maxFiles = 1,
-  maxSize = 1000000,
+  maxSize = 2000000,
   className,
   disabled = false,
 }: DropzoneInputProps) {
