@@ -1,11 +1,9 @@
 import Button from "@/components/buttons/Button";
 import Input from "@/components/form/Input";
 import UploadImage from "@/components/form/UploadImage";
-import Typography from "@/components/Typography";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import * as tf from "@tensorflow/tfjs";
-import * as tfNode from "@tensorflow/tfjs-node";
 
 import { serialize } from "object-to-formdata";
 
@@ -32,6 +30,8 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  mt: 5,
+  overflow: "auto",
 };
 
 export default function PlantAdd() {
@@ -158,12 +158,16 @@ export default function PlantAdd() {
               required: "Gambar tumbuhan harus diisi",
             }}
           />
-          <Button className="mt-2" type="submit" disabled={isPending}>
+          <Button className="mt-2" type="submit" isLoading={isPending}>
             Berikan saran!
           </Button>
         </form>
       </FormProvider>
-      <Modal open={!!recommendation} onClose={handleClose}>
+      <Modal
+        open={!!recommendation}
+        onClose={handleClose}
+        className="max-h-screen overflow-auto"
+      >
         <Box sx={style}>
           <div
             style={{ whiteSpace: "pre-line" }}
